@@ -63,26 +63,26 @@ else
  if ((mouseButton==LEFT)
   &&
 ((mouseX<move1+50)&&(mouseX>move1-50)&&(mouseY>0)&&(mouseY<100)))
-{colourFill1 +=1;} 
+{colourFill1 +=10;} 
 
 if (
   (mouseButton==LEFT)
   &&
 ((mouseX<move2+50)&&(mouseX>move2-50)&&(mouseY>100)&&(mouseY<200)))
-{colourFill2 +=1;} 
+{colourFill2 +=10;} 
 
 if (
   (mouseButton==LEFT)
   &&
 ((mouseX<move3+50)&&(mouseX>move3-50)&&(mouseY>200)&&(mouseY<300)))
-{colourFill3 +=1;} 
+{colourFill3 +=10;} 
 
 if (
   (mouseButton==LEFT)
   &&
 ((mouseX<move4+50)&&(mouseX>move4-50)&&(mouseY>300)&&(mouseY<400)))
 {
-colourFill1 +=1;colourFill2 +=1;colourFill3 +=1;
+colourFill1 +=10;colourFill2 +=10;colourFill3 +=10;
 } 
 
 if (colourFill1>255) {colourFill1=0;}
