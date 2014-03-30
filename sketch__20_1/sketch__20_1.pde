@@ -41,7 +41,7 @@ if (frameCount==9)
 if (frameCount==10)
 {fill(0);text("10", random(width), random(height));} 
 
-if (frameCount>11)
+if (frameCount>10)
 {noLoop();}            //WHEN THE SKETCH REACHS TEN, IT STOPS
 
 }
