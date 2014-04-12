@@ -31,54 +31,61 @@ import java.io.*;
 import java.util.*;
 import processing.pdf.*;
 boolean savePDF = false;
-float rotateDegree = 0;
+float rotateDegree = 0;//new
+  int clickChange = 0;//new
 
-void setup(){
-  size(550, 550);
+
+void setup() {
+  size(displayWidth, displayHeight);
 }
 
-void draw(){
+void draw() {
   if (savePDF) beginRecord(PDF, timestamp()+".pdf");
 
   strokeCap(SQUARE);
   smooth();
   noFill();
   background(255);
-  translate(mouseX,mouseY); // CHANGE #1: SHAPE FOLLOWS THE MOUSE NOW
+  translate(mouseX, mouseY); // CHANGE #1: SHAPE FOLLOWS THE MOUSE NOW
 
-  int circleResolution = (int) map(mouseY, 0,height, 2,80);
-  float radius = mouseX-width/2 + 0.5;
+
+  int circleResolution = (int) map(mouseY, 0, height, 2, 80);
+  float radius = mouseX-width/2;
   float angle = TWO_PI/circleResolution;
-  
+
   float waveVal = 0;//new
   waveVal = 50+sin(PI/10*rotateDegree)*10;//new
-  
+
 
   rotateDegree++;//new
   rotate(rotateDegree/50); //CHANGE #4: ROTATE SHAPE
- 
+
   ellipseMode(CENTER); //change #5
-  
-  beginShape();
-  for (int i=0; i<=circleResolution; i++){
+
+
+  for (int i=0; i<=circleResolution; i++)
+  {
     float x = cos(angle*i) * radius;
     float y = sin(angle*i) * radius;
-    
-    ellipse(x+100,y+100,waveVal*10,waveVal*10); 
-    ellipse(x-100,y+100,waveVal*10,waveVal*10);
-    ellipse(x+100,y-100,waveVal*10,waveVal*10);
-    ellipse(x-100,y-100,waveVal*10,waveVal*10); //CHANGE #4.1: DRAW A RECTANGLE INSTEAD OF A LINE
 
-    
-    //vertex(x, y);
+    ellipse(clickChange+x+100, clickChange+y+100, waveVal*5, waveVal*5); //new
+    ellipse(x-100-clickChange, clickChange+y+100, waveVal*5, waveVal*5);//new
+    ellipse(clickChange+x+100, y-100-clickChange, waveVal*5, waveVal*5);//new
+    ellipse(x-100-clickChange, y-100-clickChange, waveVal*5, waveVal*5); //CHANGE #4.1: DRAW A RECTANGLE INSTEAD OF A LINE
   }
-  endShape();
 
-  if (savePDF) {
+  if (savePDF) 
+  {
     savePDF = false;
     endRecord();
   }
+
+clickChange = constrain(clickChange,0,500); //NEW
+if (mousePressed==true) {clickChange+=5;} else {clickChange-=5;} //NEW
+ 
+
 }
+
 
 void keyPressed() {
   if (key=='s' || key=='S') saveFrame(timestamp()+"_##.png");
@@ -90,6 +97,5 @@ String timestamp() {
   Calendar now = Calendar.getInstance();
   return String.format("%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now);
 }
-
 
 
