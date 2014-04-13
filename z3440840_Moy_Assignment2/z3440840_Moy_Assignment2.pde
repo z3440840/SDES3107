@@ -21,39 +21,62 @@ import processing.pdf.*;
 boolean savePDF = false;
 
 float rotateDegree = 0; //CHANGE #2.1: ROTATE SHAPE
-int clickChange = 0;//CHANGE #6.1: MAKE THE 4 SHAPES MOVE APART FROM EACH OTHER WHEN MOUSE IS CLICKED AND REVERT BACK WHEN MOUSE RELEASED
+int clickChange = 0;//CHANGE #6.1: MAKE THE 4 SHAPES MOVE APART FROM EACH OTHER WHEN MOUSE IS LEFT CLICKED AND REVERT BACK WHEN MOUSE RELEASED
 float fade = 0;   //CHANGE #7.1: MAKE THE SHAPE FADE IN AND OUT 2 BY 2, ONE USING A COSINE WAVE AND THE OTHER A SINE WAVE SO THEY'LL BE "OPPOSITES"
 float fade1 = 0;  //CHANGE #7.2: MAKE THE SHAPE FADE IN AND OUT 2 BY 2, ONE USING A COSINE WAVE AND THE OTHER A SINE WAVE SO THEY'LL BE "OPPOSITES"
 float fade2 = 0;  //CHANGE #7.3: MAKE THE SHAPE FADE IN AND OUT 2 BY 2, ONE USING A COSINE WAVE AND THE OTHER A SINE WAVE SO THEY'LL BE "OPPOSITES"
-int x = 0;
+boolean shape = true; //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+boolean drawing = false; //CHANGE #9.1: WHEN THE RIGHT MOUSE BUTTON IS CLICKED, DRAWING WITH THE SHAPE IS TURNED ON, CLICK AGAIN TO TURN OFF
+float waveVal = 0;  // CHANGE #3.1: MAKE LINES "BOUNCE OFF" CURSOR WITH A SINE WAVE
 
 void setup() 
 {
   size(600,600);
+ if (drawing==true){background(255);} //CHANGE #9.1: WHEN THE RIGHT MOUSE BUTTON IS CLICKED, DRAWING WITH THE SHAPE IS TURNED ON, CLICK AGAIN TO TURN OFF
 }
 
 void draw() 
-{
-  if (savePDF) beginRecord(PDF, timestamp()+".pdf");
+{  
+  if (drawing==false){background(255);}
 
+  if (savePDF) beginRecord(PDF, timestamp()+".pdf");
+  
   strokeCap(SQUARE);
   smooth();
   noFill();
-
   translate(mouseX, mouseY); // CHANGE #1: SHAPE FOLLOWS THE MOUSE NOW  
 
+  ellipseMode(CENTER); // CHANGE #4.1: CHANGE THE LINES TO ELLIPSES AND ADD 3 ELLIPSES 
+  rectMode(CENTER); //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+ 
+  rotate(rotateDegree/50); //CHANGE #2.2: ROTATE SHAPE
+  rotateDegree++; //CHANGE #2.3: ROTATE SHAPE
+  
+  if (shape==true){circles();} //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+  if (shape==false){squares();} //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+
+
+    
+  if (savePDF) 
+    {
+      savePDF = false;
+      endRecord();
+    }
+
+  clickChange = constrain(clickChange,30,300); //CHANGE #6.2: MAKE THE 4 SHAPES MOVE APART FROM EACH OTHER WHEN MOUSE IS LEFT CLICKED AND REVERT BACK WHEN MOUSE RELEASED
+  if ((mousePressed==true)&&(mouseButton==LEFT)) {clickChange+=5;} else {clickChange-=5;} //CHANGE #6.3: MAKE THE 4 SHAPES MOVE APART FROM EACH OTHER WHEN MOUSE IS LEFT CLICKED AND REVERT BACK WHEN MOUSE RELEASED
+}
+              
+
+   
+void circles() //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+{
   int circleResolution = (int) map(mouseY, 0, height, 2, 80);
   float radius = mouseX-width/2;
   float angle = TWO_PI/circleResolution;
 
-  float waveVal = 0;  // CHANGE #3.1: MAKE LINES "BOUNCE OFF" CURSOR WITH A SINE WAVE
   waveVal = 50+sin(PI/50*rotateDegree)*50;  //CHANGE #3.2: MAKE LINES "BOUNCE OFF" CURSOR WITH A SINE WAVE
-
-  ellipseMode(CENTER); // CHANGE #4.1: CHANGE THE LINES TO ELLIPSES AND ADD 3 ELLIPSES 
- 
-  rotate(rotateDegree/50); //CHANGE #2.2: ROTATE SHAPE
-  rotateDegree++; //CHANGE #2.3: ROTATE SHAPE
-   
+  
   for (int i=0; i<=circleResolution; i++)
     {
       float x = cos(angle*i) * radius;
@@ -71,24 +94,48 @@ void draw()
       fade+=0.1; //CHANGE #7.8: MAKE THE SHAPE FADE IN AND OUT 2 BY 2, ONE USING A COSINE WAVE AND THE OTHER A SINE WAVE SO THEY'LL BE "OPPOSITES"
       fade1=126+sin(radians(fade))*(126);//CHANGE #7.9: MAKE THE SHAPE FADE IN AND OUT 2 BY 2, ONE USING A COSINE WAVE AND THE OTHER A SINE WAVE SO THEY'LL BE "OPPOSITES"
       fade2=126+cos(radians(fade))*(126);//CHANGE #7.10: MAKE THE SHAPE FADE IN AND OUT 2 BY 2, ONE USING A COSINE WAVE AND THE OTHER A SINE WAVE SO THEY'LL BE "OPPOSITES"
-    }
-  
-  if (savePDF) 
-    {
-      savePDF = false;
-      endRecord();
-    }
-
-  clickChange = constrain(clickChange,30,300); //CHANGE #6.2: MAKE THE 4 SHAPES MOVE APART FROM EACH OTHER WHEN MOUSE IS CLICKED AND REVERT BACK WHEN MOUSE RELEASED
-  if (mousePressed==true) {clickChange+=5;} else {clickChange-=5;} //CHANGE #6.3: MAKE THE 4 SHAPES MOVE APART FROM EACH OTHER WHEN MOUSE IS CLICKED AND REVERT BACK WHEN MOUSE RELEASED
+    } 
 }
 
+void squares() //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+{
+  int squareResolution = (int) map(mouseY, 0, height, 2, 80);
+  float radius = mouseX-width/2;
+  float angle = TWO_PI/squareResolution;
+
+ 
+  waveVal = 50+sin(PI/50*rotateDegree)*50;  
+  
+  for (int i=0; i<=squareResolution; i++)
+    {
+      float x = cos(angle*i) * radius;
+      float y = sin(angle*i) * radius;
+      stroke(fade1);
+      rect(clickChange+x, clickChange+y, waveVal, waveVal); 
+      stroke(fade2);
+      rect(x-clickChange, clickChange+y,waveVal, waveVal); 
+      stroke(fade2);
+      rect(clickChange+x, y-clickChange, waveVal, waveVal);
+      stroke(fade1);
+      rect(x-clickChange, y-clickChange, waveVal, waveVal); 
+      
+      fade+=0.1; 
+      fade1=126+sin(radians(fade))*(126);
+      fade2=126+cos(radians(fade))*(126);
+    }
+}
+
+void mouseReleased() //CHANGE #9.1: WHEN THE RIGHT MOUSE BUTTON IS CLICKED, DRAWING WITH THE SHAPE IS TURNED ON, CLICK AGAIN TO TURN OFF
+{if (mouseButton==RIGHT) drawing=!drawing;}//CHANGE #9.1: WHEN THE RIGHT MOUSE BUTTON IS CLICKED, DRAWING WITH THE SHAPE IS TURNED ON, CLICK AGAIN TO TURN OFF
 
 void keyPressed() 
 {
   if (key=='s' || key=='S') saveFrame(timestamp()+"_##.png");
   if (key=='p' || key=='P') savePDF = true;
 }
+
+void keyReleased() //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
+{if (key==' ') shape=!shape;} //CHANGE #8.1: MAKE THE SHAPE CHANGE WHEN SPACEBAR IS TAPPED, BY USING 2 DIFFERENT FUNCTIONS "CIRCLES" AND "SQUARES" 
 
 // timestamp
 String timestamp() 
