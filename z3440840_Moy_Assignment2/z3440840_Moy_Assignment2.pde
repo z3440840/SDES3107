@@ -1,17 +1,22 @@
-// P_2_0_01.pde
+// P_2_0_01.pde (EDITTED VERSION BY COLIN MOY)
 //LICENSE AND COPYRIGHT OF EDITTED FILE BELOW
 
 /*
- *
- * drawing a filled circle with lines.
- * 	 
+ * THIS EDITTED VERSION OF SKETCH P_2_0_01
+ * DRAWS A ROTATING RING OF 4 RINGS OF SHAPES
+ * WITH [[NEW]] CONTROLS THAT HELP YOU ALTER THE APPEARANCE OF THE SHAPE
+ *	 
  * MOUSE
- * position x          : length
- * position y          : thickness and number of lines
- * 
+ * Position X          : Distance between shapes within each ring of shapes
+ * Position Y          : Number of shapes within each ring of shapes 
+ * Left Click          : Push the 4 rings of shapes away from the cursor 
+ * Right Click         : Toggle drawing ON and OFF
+ *
  * KEYS
+ * Spacebar            : Toggle shapes to be CIRCLES or SQUARES 
  * s                   : save png
  * p                   : save pdf
+ *
 */
  
  
